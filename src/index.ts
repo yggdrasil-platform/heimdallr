@@ -4,6 +4,6 @@ import { ExpressServer } from './server';
   const server: ExpressServer = new ExpressServer();
 
   await server.config();
-  await server.initRoutes();
-  await server.listen(parseInt(process.env.PORT || '3000', 10));
+  await server.api();
+  await server.listen(parseInt(process.env.PORT || '3020', 10));
 })();

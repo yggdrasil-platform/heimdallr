@@ -1,7 +1,7 @@
 ############################
 # Image: Builds the app.
 ############################
-FROM node:12.6.0 AS builder
+FROM node:12.13.0 AS builder
 
 # Use bash shell
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -24,7 +24,7 @@ RUN ./scripts/build.sh
 ############################
 # Image: Runs the app.
 ############################
-FROM node:12.6.0-alpine
+FROM node:12.13.0-alpine
 
 ARG SERVICE_NAME
 ARG NODE_ENV

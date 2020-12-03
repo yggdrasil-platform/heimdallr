@@ -1,3 +1,5 @@
+import { ApolloGateway } from '@apollo/gateway';
+import { ApolloServer } from 'apollo-server-express';
 import { json, urlencoded } from 'body-parser';
 import Express, { Application } from 'express';
 import { createServer } from 'http';
@@ -22,17 +24,36 @@ import { RouterOptions } from './types';
 
 export class ExpressServer {
   public readonly app: Application;
+  public graphqlServer: ApolloServer;
   public readonly logger: Logger;
 
   constructor() {
     this.app = Express();
-    this.logger = createLogger(process.env.SERVICE_NAME);
+    this.logger = createLogger(process.env.SERVICE_NAME, process.env.LOG_LEVEL);
+  }
+
+  /**
+   * Sets up all the API routes.
+   */
+  public api(): void {
+    const options: RouterOptions = {
+      logger: this.logger,
+    };
+
+    // Add routes.
+    this.app.use(
+      Endpoints.HEALTHCHECK,
+      healthcheckRouter(Endpoints.HEALTHCHECK, options)
+    );
+
+    // Error handling.
+    this.app.use(errorHandler(this.logger));
   }
 
   /**
    * Configures the application.
    */
-  public async config(): Promise<void> {
+  public config(): void {
     // Setup middleware.
     this.app.use(
       morgan('combined', {
@@ -50,6 +71,18 @@ export class ExpressServer {
     this.app.enable('strict routing');
   }
 
+  public async graphql(): Promise<void> {
+    const gateway: ApolloGateway = new ApolloGateway({
+      serviceList: [{ name: 'accounts', url: 'http://localhost:4001' }],
+    });
+
+    this.graphqlServer = new ApolloServer({ gateway });
+
+    this.graphqlServer.applyMiddleware({
+      app: this.app,
+    });
+  }
+
   /**
    * Convenience function that simply runs Express.listen() and wraps it in a promise with logging.
    * @param {string | number} port
@@ -58,7 +91,7 @@ export class ExpressServer {
     return new Promise((resolve: () => void) => {
       createServer(this.app).listen(port, () => {
         this.logger.info(
-          `up and running in ${
+          `🚀 blast off in ${
             process.env.NODE_ENV
           } @: ${hostname()} on port: ${port}}`
         );
@@ -66,23 +99,5 @@ export class ExpressServer {
         resolve();
       });
     });
-  }
-
-  /**
-   * Sets up all the routes.
-   */
-  public initRoutes(): void {
-    const options: RouterOptions = {
-      logger: this.logger,
-    };
-
-    // Add routes.
-    this.app.use(
-      Endpoints.HEALTHCHECK,
-      healthcheckRouter(Endpoints.HEALTHCHECK, options)
-    );
-
-    // Error handling.
-    this.app.use(errorHandler(this.logger));
   }
 }
