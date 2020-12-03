@@ -1,7 +1,7 @@
 {
-  "name": "new-service-template",
+  "name": "heimdallr",
   "version": "1.0.0",
-  "description": "A template for new Node.js services",
+  "description": "The gateway to the Yggdrasil platform.",
   "main": "dist/index.js",
   "license": "See LICESNSE.md",
   "author": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kieranroneill/new-service-template"
+    "url": "https://github.com/kieranroneill/heimdallr"
   },
   "private": true,
   "engines": {

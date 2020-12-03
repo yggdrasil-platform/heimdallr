@@ -1,6 +1,6 @@
-# New Service Template
+# Heimdallr
 
-A template for creating new templates
+The gateway to the Yggdrasil platform.
 
 #### Table of contents
 
@@ -96,10 +96,10 @@ This will build and run a Postgres docker image and run the tests against it.
 When building the Docker image, we want to inject env vars at build time, as the [`Dockerfile`](./Dockerfile) injects the build args as env vars into the container.
 ```bash
 docker build \
--t kieranroneill/new_service_template \
---build-arg SERVICE_NAME=new-service-template \
+-t kieranroneill/heimdallr \
+--build-arg SERVICE_NAME=heimdallr \
 --build-arg NODE_ENV=production \
---build-arg PORT=3000 \
+--build-arg PORT=3020 \
 .
 ```
 
@@ -107,8 +107,8 @@ docker build \
 
 ```bash
 docker run \
---name new_service_template \
+--name heimdallr \
 -it \
 -p 1337:${PORT} \
-kieranroneill/new_service_template:latest
+kieranroneill/heimdallr:latest
 ```
