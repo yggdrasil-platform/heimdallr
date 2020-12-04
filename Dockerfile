@@ -26,13 +26,15 @@ RUN ./scripts/build.sh
 ############################
 FROM node:14.15.1-alpine
 
-ARG SERVICE_NAME
-ARG NODE_ENV
-ARG PORT
+ARG log_level
+ARG node_env
+ARG port
+ARG service_name
 
-ENV SERVICE_NAME=$SERVICE_NAME
-ENV NODE_ENV=$NODE_ENV
-ENV PORT=$PORT
+ENV LOG_LEVEL=$log_level
+ENV NODE_ENV=$node_env
+ENV PORT=$port
+ENV SERVICE_NAME=$service_name
 
 # Get distro depencdencies
 RUN apk add --no-cache --upgrade bash

@@ -1,7 +1,7 @@
 {
   "name": "heimdallr",
   "version": "1.0.0",
-  "description": "The gateway to the Yggdrasil platform.",
+  "description": "The gateway to the Yggdrasil platform",
   "main": "dist/index.js",
   "license": "See LICESNSE.md",
   "author": {
