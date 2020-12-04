@@ -56,7 +56,7 @@ Below is a quick outline of the structure of the app:
 
 ### 1. Prerequisites
 
-* Install [NodeJS 12.13.0+](https://nodejs.org/en/download/).
+* Install [NodeJS 14.15.1+](https://nodejs.org/en/download/).
 * Install [Yarn](https://yarnpkg.com/).
 * Install [Docker](https://docs.docker.com/get-docker/).
 
@@ -99,7 +99,7 @@ docker build \
 -t kieranroneill/heimdallr \
 --build-arg SERVICE_NAME=heimdallr \
 --build-arg NODE_ENV=production \
---build-arg PORT=3020 \
+--build-arg PORT=3000 \
 .
 ```
 

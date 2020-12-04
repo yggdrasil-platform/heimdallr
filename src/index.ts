@@ -5,5 +5,5 @@ import { ExpressServer } from './server';
 
   await server.config();
   await server.api();
-  await server.listen(parseInt(process.env.PORT || '3020', 10));
+  await server.listen(parseInt(process.env.PORT || '3000', 10));
 })();
