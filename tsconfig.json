@@ -2,7 +2,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowJs": true,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "lib": ["es6"],
     "module": "commonjs",
     "moduleResolution": "node",
@@ -13,6 +15,7 @@
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": false,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es6",
     "typeRoots": ["@types", "node_modules/@types"]

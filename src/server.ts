@@ -5,7 +5,11 @@ import Express, { Application } from 'express';
 import { createServer } from 'http';
 import morgan from 'morgan';
 import { hostname } from 'os';
+import { Connection, createConnection } from 'typeorm';
 import { Logger } from 'winston';
+
+// Configs.
+import { databaseConfig } from './config';
 
 // Constants.
 import { Endpoints } from './constants';
@@ -13,17 +17,24 @@ import { Endpoints } from './constants';
 // Middlewares.
 import { errorHandler } from './middlewares';
 
+// Models.
+import { Service } from './models';
+
 // Modules.
 import { createLogger } from './modules/logger';
 
 // Routers.
 import healthcheckRouter from './api/healthcheck/router';
 
+// Seeds.
+import seeds from './seeds';
+
 // Types.
 import { RouterOptions } from './types';
 
 export class ExpressServer {
   public readonly app: Application;
+  public connection: Connection;
   public graphqlServer: ApolloServer;
   public readonly logger: Logger;
 
@@ -36,7 +47,19 @@ export class ExpressServer {
    * Sets up all the API routes.
    */
   public api(): void {
-    const options: RouterOptions = {
+    let error: Error;
+    let options: RouterOptions;
+
+    if (!this.connection || !this.connection.isConnected) {
+      error = new Error('database not connected');
+
+      this.logger.error(error.message);
+
+      throw error;
+    }
+
+    options = {
+      connection: this.connection,
       logger: this.logger,
     };
 
@@ -71,12 +94,43 @@ export class ExpressServer {
     this.app.enable('strict routing');
   }
 
+  public async database(): Promise<void> {
+    this.connection = await createConnection(databaseConfig);
+
+    for (const seed of seeds) {
+      await seed.run(this.connection);
+    }
+  }
+
   public async graphql(): Promise<void> {
-    const gateway: ApolloGateway = new ApolloGateway({
-      serviceList: [{ name: 'accounts', url: 'http://localhost:4001' }],
+    let error: Error;
+    let gateway: ApolloGateway;
+    let services: Service[];
+
+    if (!this.connection || !this.connection.isConnected) {
+      error = new Error('database not connected');
+
+      this.logger.error(error.message);
+
+      throw error;
+    }
+
+    // Get all the services in the db and add them to a gateway.
+    services = await this.connection
+      .getRepository(Service)
+      .createQueryBuilder('service')
+      .getMany();
+    gateway = new ApolloGateway({
+      serviceList: services.map(({ name, url }) => ({
+        name,
+        url,
+      })),
     });
 
-    this.graphqlServer = new ApolloServer({ gateway });
+    this.graphqlServer = new ApolloServer({
+      gateway,
+      subscriptions: false,
+    });
 
     this.graphqlServer.applyMiddleware({
       app: this.app,
