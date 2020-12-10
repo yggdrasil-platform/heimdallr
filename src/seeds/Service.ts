@@ -8,7 +8,7 @@ const data: Partial<Service>[] = [
     createdAt: new Date(),
     name: 'valkyrie',
     updatedAt: new Date(),
-    url: 'http://valkyrie:3000/graphql',
+    url: 'http://valkyrie:3000',
   },
 ];
 

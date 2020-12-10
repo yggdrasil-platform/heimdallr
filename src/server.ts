@@ -123,7 +123,7 @@ export class ExpressServer {
     gateway = new ApolloGateway({
       serviceList: services.map(({ name, url }) => ({
         name,
-        url,
+        url: `${url}/graphql`,
       })),
     });
 

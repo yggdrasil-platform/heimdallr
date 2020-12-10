@@ -18,14 +18,16 @@
     "node": ">=14.15.1"
   },
   "scripts": {
+    "get-version": "echo $npm_package_version",
     "lint": "eslint . --ext .ts --ext .js",
     "prettier": "prettier --config .prettierrc --write \"src/**/*.{js,json,ts}\"",
-    "start": "DOTENV_CONFIG_PATH=.env.dev ts-node-dev -r dotenv/config --respawn --transpile-only src/index.ts",
+    "start": "VERSION=$npm_package_version ts-node-dev -r dotenv/config --respawn --transpile-only src/index.ts",
     "test": "./scripts/test.sh"
   },
   "dependencies": {
     "@apollo/gateway": "^0.21.3",
     "apollo-server-express": "^2.19.0",
+    "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "graphql": "^15.4.0",

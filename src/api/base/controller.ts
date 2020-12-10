@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { Connection } from 'typeorm';
 import { Logger } from 'winston';
 
 // Errors.
@@ -8,9 +9,11 @@ import { RequestError } from '../../errors';
 import { RouterOptions } from '../../types';
 
 export default class Controller {
+  protected readonly connection: Connection;
   protected readonly logger: Logger;
 
   constructor(options: RouterOptions) {
+    this.connection = options.connection;
     this.logger = options.logger;
   }
 
