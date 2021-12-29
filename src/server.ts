@@ -1,4 +1,4 @@
-import { ApolloGateway } from '@apollo/gateway';
+import { ApolloGateway, ServiceEndpointDefinition } from '@apollo/gateway';
 import { ApolloServer } from 'apollo-server-express';
 import { json, urlencoded } from 'body-parser';
 import Express, { Application } from 'express';
@@ -121,10 +121,19 @@ export class ExpressServer {
       .createQueryBuilder('service')
       .getMany();
     gateway = new ApolloGateway({
-      serviceList: services.map(({ name, url }) => ({
-        name,
-        url: `${url}/graphql`,
-      })),
+      serviceList: services.reduce<ServiceEndpointDefinition[]>(
+        (acc, currentValue) =>
+          currentValue.public
+            ? [
+                ...acc,
+                {
+                  name: currentValue.alias,
+                  url: `${currentValue.url}/graphql`,
+                },
+              ]
+            : acc,
+        []
+      ),
     });
 
     this.graphqlServer = new ApolloServer({

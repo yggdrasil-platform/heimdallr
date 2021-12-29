@@ -2,27 +2,28 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export default class Service extends BaseEntity {
-  @Column({
-    nullable: false,
-  })
-  createdAt: Date;
-
-  @Column({
-    nullable: false,
-    unique: true,
-  })
-  name: string;
-
-  @Column({
-    nullable: false,
-  })
-  url: string;
-
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     nullable: false,
+    unique: true,
   })
-  updatedAt: Date;
+  alias: string;
+
+  @Column()
+  name: string;
+
+  @Column()
+  description: string;
+
+  @Column({
+    nullable: false,
+  })
+  public: boolean;
+
+  @Column({
+    nullable: false,
+  })
+  url: string;
 }

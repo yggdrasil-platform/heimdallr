@@ -5,10 +5,18 @@ import { Service } from '../models';
 
 const data: Partial<Service>[] = [
   {
-    createdAt: new Date(),
-    name: 'valkyrie',
-    updatedAt: new Date(),
-    url: 'http://valkyrie:3000',
+    alias: 'mimir',
+    description: 'Handles authentication',
+    name: 'Mimir',
+    public: false,
+    url: 'http://mimir:3000',
+  },
+  {
+    alias: 'valhalla',
+    description: 'Handles account and user information',
+    name: 'Valhalla',
+    public: false,
+    url: 'http://valhalla:3000',
   },
 ];
 
